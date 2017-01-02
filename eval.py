@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import tensorflow as tf
 import numpy as np
@@ -70,16 +71,20 @@ with graph.as_default():
 
         # Tensors we want to evaluate
         predictions = graph.get_operation_by_name("output/predictions").outputs[0]
+        probabilities = graph.get_operation_by_name("output/probabilities").outputs[0]
 
         # Generate batches for one epoch
         batches = data_helpers.batch_iter(list(x_test), FLAGS.batch_size, 1, shuffle=False)
 
         # Collect the predictions here
         all_predictions = []
+        all_probabilities = []
 
         for x_test_batch in batches:
             batch_predictions = sess.run(predictions, {input_x: x_test_batch, dropout_keep_prob: 1.0})
             all_predictions = np.concatenate([all_predictions, batch_predictions])
+            batch_probabilities = np.amax(np.around(sess.run(probabilities, {input_x: x_test_batch, dropout_keep_prob: 1.0}), decimals=10), axis=1)
+            all_probabilities = np.concatenate([all_probabilities, batch_probabilities])
 
 # Print accuracy if y_test is defined
 if y_test is not None:
@@ -88,7 +93,7 @@ if y_test is not None:
     print("Accuracy: {:g}".format(correct_predictions/float(len(y_test))))
 
 # Save the evaluation to a csv
-predictions_human_readable = np.column_stack((np.array(x_raw), all_predictions))
+predictions_human_readable = np.column_stack((np.array(x_raw), all_predictions, all_probabilities))
 out_path = os.path.join(FLAGS.checkpoint_dir, "..", "prediction.csv")
 print("Saving evaluation to {0}".format(out_path))
 with open(out_path, 'w') as f:
