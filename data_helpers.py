@@ -28,23 +28,32 @@ def clean_str(string):
     return string.strip().lower()
 
 
-def load_data_and_labels(positive_data_file, negative_data_file):
+def load_data_and_labels(datasample_file_1, datasample_file_2, datasample_file_3, datasample_file_4, datasample_file_5):
     """
     Loads MR polarity data from files, splits the data into words and generates labels.
     Returns split sentences and labels.
     """
     # Load data from files
-    positive_examples = list(open(positive_data_file, "r").readlines())
-    positive_examples = [s.strip() for s in positive_examples]
-    negative_examples = list(open(negative_data_file, "r").readlines())
-    negative_examples = [s.strip() for s in negative_examples]
+    datasample_examples1 = list(open(datasample_file_1, "r").readlines())
+    datasample_examples1 = [s.strip() for s in datasample_examples1]
+    datasample_examples2 = list(open(datasample_file_2, "r").readlines())
+    datasample_examples2 = [s.strip() for s in datasample_examples2]
+    datasample_examples3 = list(open(datasample_file_3, "r").readlines())
+    datasample_examples3 = [s.strip() for s in datasample_examples3]
+    datasample_examples4 = list(open(datasample_file_4, "r").readlines())
+    datasample_examples4 = [s.strip() for s in datasample_examples4]
+    datasample_examples5 = list(open(datasample_file_5, "r").readlines())
+    datasample_examples5 = [s.strip() for s in datasample_examples5]
     # Split by words
-    x_text = positive_examples + negative_examples
+    x_text = datasample_examples1 + datasample_examples2 + datasample_examples3 + datasample_examples4 + datasample_examples5
     x_text = [clean_str(sent) for sent in x_text]
     # Generate labels
-    positive_labels = [[0, 1] for _ in positive_examples]
-    negative_labels = [[1, 0] for _ in negative_examples]
-    y = np.concatenate([positive_labels, negative_labels], 0)
+    datasample_labels1 = [[1, 0, 0, 0, 0] for _ in datasample_examples1]
+    datasample_labels2 = [[0, 1, 0, 0, 0] for _ in datasample_examples2]
+    datasample_labels3 = [[0, 0, 1, 0, 0] for _ in datasample_examples3]
+    datasample_labels4 = [[0, 0, 0, 1, 0] for _ in datasample_examples4]
+    datasample_labels5 = [[0, 0, 0, 0, 1] for _ in datasample_examples5]
+    y = np.concatenate([datasample_labels1, datasample_labels2, datasample_labels3, datasample_labels4, datasample_labels5], 0)
     return [x_text, y]
 
 
