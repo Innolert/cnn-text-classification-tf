@@ -103,7 +103,7 @@ with graph.as_default():
 
 # Save the evaluation to a csv
 predictions_human_readable = np.column_stack((np.array(x_raw), [x + 1 for x in all_predictions], all_probabilities))
-print(json.dumps({ "text": predictions_human_readable[0][0], "predictedClass": int(float(predictions_human_readable[0][1])), "probability": float(predictions_human_readable[0][2]) }, ensure_ascii=False));
+print(json.dumps({ "text": predictions_human_readable[0][0], "predictedClass": int(float(predictions_human_readable[0][1])), "probability": float(predictions_human_readable[0][2]) }, ensure_ascii=False, sort_keys=True));
 # out_path = os.path.join(FLAGS.checkpoint_dir, "..", "prediction.csv")
 # print("Saving evaluation to {0}".format(out_path))
 # with open(out_path, 'w') as f:
